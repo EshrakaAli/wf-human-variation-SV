@@ -743,7 +743,6 @@ workflow {
         sniffles_vcf = Channel.fromPath("${projectDir}/data/OPTIONAL_FILE", checkIfExists: true)
     }
 
-workflow {
     // ... upper pipeline steps (FastQ processing, Minimap2 alignment, etc.) ...
 
     // Look for the conditional mapping or block where the BAM channel is ready:
@@ -758,7 +757,6 @@ workflow {
             RUN_SVIM(bam_ch, ref_fasta)
         }
     }
-}
 
 if (params.sv) {
     // 1. Run the native Sniffles process (capture its output VCF)
