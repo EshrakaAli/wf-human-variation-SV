@@ -742,6 +742,23 @@ workflow {
         sniffles_vcf = Channel.fromPath("${projectDir}/data/OPTIONAL_FILE", checkIfExists: true)
     }
 
+workflow {
+    // ... upper pipeline steps (FastQ processing, Minimap2 alignment, etc.) ...
+
+    // Look for the conditional mapping or block where the BAM channel is ready:
+    if (params.sv) {
+        
+        // This bam_ch contains [meta, bam, bai] from upstream alignment
+        if (params.cutesv) {
+            RUN_CUTESV(bam_ch, ref_fasta)
+        }
+
+        if (params.svim) {
+            RUN_SVIM(bam_ch, ref_fasta)
+        }
+    }
+}
+
     // Then, we finish working on the SNPs by refining with SVs and annotating them. This is needed to
     // maximise the interaction between Clair3 and Sniffles.
     if (run_snp){
