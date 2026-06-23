@@ -757,17 +757,6 @@ workflow {
         }
     }
 
-if (params.sv) {
-    // 1. Run the native Sniffles process (capture its output VCF)
-    // Note: Verify the precise name of the native sniffles call process in your version
-    RUN_SNIFFLES(bam_ch, ref_fasta) 
-    
-    if (params.cutesv) {
-        RUN_CUTESV(sv_bam, ref_channel)
-    }
-    if (params.svim) {
-        RUN_SVIM(sv_bam, ref_channel)
-    }
 
     // 2. Combine the individual caller channels matching the exact same sample metadata
     if (params.cutesv && params.svim) {
