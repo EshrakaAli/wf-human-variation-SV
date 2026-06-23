@@ -760,7 +760,7 @@ workflow {
 if (params.sv) {
     // 1. Run the native Sniffles process (capture its output VCF)
     // Note: Verify the precise name of the native sniffles call process in your version
-    RUN_SNIFFLES(sv_bam, ref_channel) 
+    RUN_SNIFFLES(bam_ch, ref_fasta) 
     
     if (params.cutesv) {
         RUN_CUTESV(sv_bam, ref_channel)
