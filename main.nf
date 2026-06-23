@@ -760,6 +760,31 @@ workflow {
     }
 }
 
+if (params.sv) {
+    // 1. Run the native Sniffles process (capture its output VCF)
+    // Note: Verify the precise name of the native sniffles call process in your version
+    RUN_SNIFFLES(bam_ch, ref_fasta) 
+    
+    if (params.cutesv) {
+        RUN_CUTESV(bam_ch, ref_fasta)
+    }
+    if (params.svim) {
+        RUN_SVIM(bam_ch, ref_fasta)
+    }
+
+    // 2. Combine the individual caller channels matching the exact same sample metadata
+    if (params.cutesv && params.svim) {
+        
+        // Combine outputs based on the unique 'meta' key
+        sv_combo_ch = RUN_SNIFFLES.out.vcf
+            .join(RUN_CUTESV.out.vcf)
+            .join(RUN_SVIM.out.vcf)
+
+        // 3. Trigger the SURVIVOR process
+        MERGE_SVS(sv_combo_ch)
+    }
+}
+
     // Then, we finish working on the SNPs by refining with SVs and annotating them. This is needed to
     // maximise the interaction between Clair3 and Sniffles.
     if (run_snp){
