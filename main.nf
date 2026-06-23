@@ -2,7 +2,6 @@
 
 nextflow.enable.dsl = 2
 
-include { RUN_CUTESV; RUN_SVIM } from './modules/local/custom_sv_callers'
 include { RUN_CUTESV; RUN_SVIM; MERGE_SVS } from './modules/local/custom_sv_callers'
 
 include { snp; report_snp } from './workflows/wf-human-snp'
