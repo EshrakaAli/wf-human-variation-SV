@@ -34,6 +34,19 @@
                         }
                     }
                 },
+    "cutesv": {
+    "title": "CuteSV",
+    "type": "boolean",
+    "description": "Run CuteSV structural variant caller.",
+    "default": false
+},
+
+"svim": {
+    "title": "SVIM",
+    "type": "boolean",
+    "description": "Run SVIM structural variant caller.",
+    "default": false
+},
                 "snp": {
                     "title": "SNP: Small variants",
                     "type": "boolean",
