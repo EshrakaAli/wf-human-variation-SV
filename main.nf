@@ -761,7 +761,7 @@ if (params.sv) {
     if (params.cutesv && params.svim) {
         
         // Combine outputs based on the unique 'meta' key
-        sv_combo_ch = RUN_SNIFFLES.out.vcf
+        sv_combo_ch = sniffles_vcf
             .join(RUN_CUTESV.out.vcf)
             .join(RUN_SVIM.out.vcf)
 
