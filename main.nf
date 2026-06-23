@@ -749,11 +749,11 @@ workflow {
         
         // This bam_ch contains [meta, bam, bai] from upstream alignment
         if (params.cutesv) {
-            RUN_CUTESV(sv_bam, ref_fasta)
+            RUN_CUTESV(sv_bam, ref_channel)
         }
 
         if (params.svim) {
-            RUN_SVIM(sv_bam, ref_fasta)
+            RUN_SVIM(sv_bam, ref_channel)
         }
     }
 
