@@ -750,19 +750,6 @@ if (params.sv) {
     // 1. Run the native Sniffles process (capture its output VCF)
     // Note: Verify the precise name of the native sniffles call process in your version
 
-    if (params.cutesv) {
-        RUN_CUTESV(bam_channel,
-    tr_bed,
-    reference,
-    genome_build)
-    }
-    if (params.svim) {
-        RUN_SVIM(bam_channel,
-    tr_bed,
-    reference,
-    genome_build)
-    }
-
     // 2. Combine the individual caller channels matching the exact same sample metadata
     if (params.cutesv && params.svim) {
         
