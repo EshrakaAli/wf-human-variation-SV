@@ -150,16 +150,20 @@ workflow variantCall {
 // ADD HERE
 if (params.cutesv) {
     RUN_CUTESV(
-        bam_channel,
-        reference
-    )
+    bam_channel,
+    tr_bed,
+    reference,
+    genome_build
+)
 }
 
 if (params.svim) {
-    RUN_SVIM(
-        bam_channel,
-        reference
-    )
+RUN_SVIM(
+    bam_channel,
+    tr_bed,
+    reference,
+    genome_build
+)
 }
 
 filterCalls(
