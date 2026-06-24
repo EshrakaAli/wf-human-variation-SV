@@ -166,7 +166,7 @@ RUN_SVIM(
 )
 }
 
-filterCalls(
+filterCalls_sv(
     sniffles2.out.vcf,
     mosdepth_stats,
     target_bed,
