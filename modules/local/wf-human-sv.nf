@@ -10,6 +10,23 @@ process sniffles2 {
         file tr_bed
         tuple path(ref), path(ref_idx), path(ref_cache), env(REF_PATH)
         val genome_build
+if (params.cutesv) {
+    RUN_CUTESV(
+        bam_channel,
+        tr_bed,
+        reference,
+        genome_build
+    )
+}
+
+if (params.svim) {
+    RUN_SVIM(
+        bam_channel,
+        tr_bed,
+        reference,
+        genome_build
+    )
+}
     output:
         tuple val(xam_meta), path("*.sniffles.vcf"), emit: vcf
         path "${xam_meta.alias}.wf_sv.snf", emit: snf
