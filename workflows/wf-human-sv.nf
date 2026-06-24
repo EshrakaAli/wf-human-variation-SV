@@ -7,7 +7,7 @@ include {
     report;
 } from "../modules/local/wf-human-sv.nf"
 include {
-    filterBenchmarkVcf;a
+    filterBenchmarkVcf;
     intersectBedWithTruthset;
     truvari;
 } from "../modules/local/wf-human-sv-eval.nf"
