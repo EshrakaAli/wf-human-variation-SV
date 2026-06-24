@@ -2,7 +2,7 @@
 
 nextflow.enable.dsl = 2
 
-//include { RUN_CUTESV; RUN_SVIM; MERGE_SVS } from './modules/local/custom_sv_callers'
+include { RUN_CUTESV; RUN_SVIM; MERGE_SVS } from './modules/local/custom_sv_callers'
 
 include { snp; report_snp } from './workflows/wf-human-snp'
 include { lookup_clair3_model } from './modules/local/wf-human-snp'
@@ -1054,4 +1054,5 @@ workflow.onComplete {
 }
 workflow.onError {
     Pinguscript.ping_error(nextflow, workflow, params)
+}
 }
