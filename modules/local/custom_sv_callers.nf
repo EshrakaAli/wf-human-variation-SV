@@ -80,14 +80,3 @@ process MERGE_SVS {
         ${meta.alias}.consensus.vcf
     """
 }
-
-    # SURVIVOR merge parameters:
-    # 1000: Max distance between breakpoints (1kb)
-    # 2: Minimum callers required to support a variant (e.g., 2 out of 3)
-    # 1: Take variant type into account (1=yes)
-    # 1: Take variant strand into account (1=yes)
-    # 0: Disabled estimate parameter
-    # 30: Minimum size of variants to merge
-    SURVIVOR merge vcf_list.txt 1000 2 1 1 0 30 ${meta.sample_name}.consensus.vcf
-    """
-}
