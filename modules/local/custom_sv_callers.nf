@@ -29,7 +29,7 @@ process RUN_CUTESV {
 }
 
 process RUN_SVIM {
-    container "quay.io/biocontainers/svim:2.0.0--py310hdfd78af_3"
+    container "quay.io/biocontainers/svim:2.0.0--pyhdfd78af_0"
     label "wgs"
     publishDir "${params.out_dir}/svim", mode: 'copy'
 
