@@ -1,6 +1,7 @@
 // NOTE VCF entries for alleles with no support are removed to prevent them from
 //      breaking downstream parsers that do not expect them
 // --input-exclude-flags 2308: Remove unmapped (4), non-primary (256) and supplemental (2048) alignments
+include { RUN_CUTESV; RUN_SVIM } from './custom_sv_callers'
 process sniffles2 {
     label "wf_human_sv"
     cpus params.threads
