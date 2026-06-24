@@ -1,5 +1,5 @@
 process RUN_CUTESV {
-    container "quay.io/biocontainers/cutesv:2.1.1--py310h248e362_0"
+    container "quay.io/biocontainers/cutesv:2.1.1--pyhdfd78af_0"
     label "wgs"
     publishDir "${params.out_dir}/cutesv", mode: 'copy'
 
