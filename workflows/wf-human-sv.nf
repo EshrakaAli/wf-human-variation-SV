@@ -172,7 +172,7 @@ filterCalls(
     target_bed,
     chromosome_codes
 )
-        filterCalls(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
+        filterCalls_sv(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
         sortVCF(filterCalls.out.vcf)
 
     emit:
