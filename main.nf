@@ -82,7 +82,7 @@ include {
 
 
 // entrypoint workflow
-WorkflowMain.initialise(workflow, params, log)
+WorkflowMain.initialise(workflow, params, log);
 workflow {
 
     Map colors = NfcoreTemplate.logColours(params.monochrome_logs)
