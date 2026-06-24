@@ -1,3 +1,4 @@
+include { RUN_CUTESV; RUN_SVIM; MERGE_SVS } from '../modules/local/custom_sv_callers'
 include {
     sniffles2;
     filterCalls;
