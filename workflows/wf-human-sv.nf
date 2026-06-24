@@ -146,6 +146,27 @@ workflow variantCall {
         }
 
         sniffles2(bam_channel, tr_bed, reference, genome_build)
+// ADD HERE
+if (params.cutesv) {
+    RUN_CUTESV(
+        bam_channel,
+        reference
+    )
+}
+
+if (params.svim) {
+    RUN_SVIM(
+        bam_channel,
+        reference
+    )
+}
+
+filterCalls(
+    sniffles2.out.vcf,
+    mosdepth_stats,
+    target_bed,
+    chromosome_codes
+)
         filterCalls(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
         sortVCF(filterCalls.out.vcf)
 
