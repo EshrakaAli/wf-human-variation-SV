@@ -7,7 +7,7 @@ include {
     report;
 } from "../modules/local/wf-human-sv.nf"
 include {
-    filterBenchmarkVcf;
+    filterBenchmarkVcf;a
     intersectBedWithTruthset;
     truvari;
 } from "../modules/local/wf-human-sv-eval.nf"
@@ -166,12 +166,6 @@ RUN_SVIM(
 )
 }
 
-filterCalls_sv(
-    sniffles2.out.vcf,
-    mosdepth_stats,
-    target_bed,
-    chromosome_codes
-)
         filterCalls_sv(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
         sortVCF(filterCalls.out.vcf)
 
