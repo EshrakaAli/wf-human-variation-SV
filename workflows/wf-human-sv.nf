@@ -167,7 +167,7 @@ RUN_SVIM(
 }
 
         filterCalls_sv(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
-        sortVCF(filterCalls.out.vcf)
+        sortVCF(filterCalls_sv.out.vcf)
 
     emit:
         vcf = sortVCF.out.vcf_gz
