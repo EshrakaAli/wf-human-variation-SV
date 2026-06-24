@@ -751,18 +751,7 @@ if (params.sv) {
     // Note: Verify the precise name of the native sniffles call process in your version
 
     // 2. Combine the individual caller channels matching the exact same sample metadata
-    if (params.cutesv && params.svim) {
-        
-        // Combine outputs based on the unique 'meta' key
-        sv_combo_ch = sniffles_vcf
-            .join(RUN_CUTESV.out.vcf)
-            .join(RUN_SVIM.out.vcf)
-
-        // 3. Trigger the SURVIVOR process
-        MERGE_SVS(sv_combo_ch)
-    }
-}
-
+    
     // Then, we finish working on the SNPs by refining with SVs and annotating them. This is needed to
     // maximise the interaction between Clair3 and Sniffles.
     if (run_snp){
