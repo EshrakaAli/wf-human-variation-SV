@@ -53,7 +53,7 @@ process RUN_SVIM {
     """
 }
 process MERGE_SVS {
-    container "quay.io/biocontainers/survivor:1.0.7--h9a82719_6"
+    container "quay.io/biocontainers/survivor:1.0.7--he513fc3_0"
     publishDir "${params.out_dir}/survivor_consensus", mode: 'copy'
 
     input:
