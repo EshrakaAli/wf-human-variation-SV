@@ -733,6 +733,41 @@ workflow {
         )
         artifacts = results_sv.report.flatten()
         sniffles_vcf = results_sv.sniffles_vcf
+
+//for survivor merge
+if(params.cutesv){
+    RUN_CUTESV(
+        sv_bam,
+        OPTIONAL,
+        ref_channel,
+        genome_build
+    )
+}
+
+if(params.svim){
+    RUN_SVIM(
+        sv_bam,
+        OPTIONAL,
+        ref_channel,
+        genome_build
+    )
+}
+
+if(params.cutesv && params.svim){
+
+    merged_input =
+        sniffles_vcf
+            .join(RUN_CUTESV.out.vcf, by:0)
+            .join(RUN_SVIM.out.vcf, by:0)
+            .map { meta, sniffles, cutesv, svim ->
+                [meta, sniffles, cutesv, svim]
+            }
+
+    MERGE_SVS(merged_input)
+
+    consensus_vcf = MERGE_SVS.out.consensus_vcf
+}
+
         json_sv = results_sv.sv_stats_json
         sv_vcf = results_sv.for_phasing
         output_sv(artifacts)
@@ -1042,7 +1077,8 @@ if (params.sv) {
             bed_summary.flatten(),
             coverage_bed_summary.flatten(),
             hap_check.flatten(),
-            igv_out.flatten()
+            igv_out.flatten(),
+consensus_vcf ? consensus_vcf.flatten() : Channel.empty()
         )
         | filter{it.name != 'OPTIONAL_FILE'}
     )
