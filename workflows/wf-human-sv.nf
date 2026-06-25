@@ -184,7 +184,7 @@ MERGE_SVS(merged_input)
         vcf = sortVCF.out.vcf_gz
         vcf_index = sortVCF.out.vcf_tbi
 //after SURVIVOR merging
-sniffles_vcf = sniffles_vcf
+sniffles_vcf = sniffles2.out.vcf
 cutesv_vcf = RUN_CUTESV.out.vcf
 svim_vcf = RUN_SVIM.out.vcf
 consensus_vcf = MERGE_SVS.out.consensus_vcf
