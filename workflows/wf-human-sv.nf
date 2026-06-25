@@ -225,3 +225,4 @@ workflow runReport {
         html = report.out.html
         json = report.out.json
 }
+}
