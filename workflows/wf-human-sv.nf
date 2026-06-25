@@ -206,7 +206,7 @@ MERGE_SVS(merged_input)
     cutesv_vcf = RUN_CUTESV.out.vcf
     svim_vcf = RUN_SVIM.out.vcf
     consensus_vcf = MERGE_SVS.out.consensus_vcf
-
+}
 
 workflow runReport {
     take:
@@ -225,4 +225,4 @@ workflow runReport {
         html = report.out.html
         json = report.out.json
 }
-}
+
