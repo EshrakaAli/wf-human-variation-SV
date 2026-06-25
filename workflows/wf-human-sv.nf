@@ -37,7 +37,7 @@ if (params.cutesv && params.svim) {
             .join(called.svim_vcf, by:0)
             .map { meta, sniffles, cutesv, svim ->
                 [meta, sniffles, cutesv, svim]
-            }
+}
 
     MERGE_SVS(merged_input)
 }
