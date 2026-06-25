@@ -28,7 +28,19 @@ workflow bam {
         workflow_params
     main:
         called = variantCall(bam_channel, reference, target, mosdepth_stats, optional_file, genome_build, chromosome_codes)
+//for survivor merging 
+if (params.cutesv && params.svim) {
 
+    merged_input =
+        called.sniffles_vcf
+            .join(called.cutesv_vcf, by:0)
+            .join(called.svim_vcf, by:0)
+            .map { meta, sniffles, cutesv, svim ->
+                [meta, sniffles, cutesv, svim]
+            }
+
+    MERGE_SVS(merged_input)
+}
         // benchmark
         if (params.sv_benchmark) {
             maybe_benchmark_result = runBenchmark(called.vcf, reference, target)
@@ -69,6 +81,12 @@ workflow bam {
         report = report
         sv_stats_json = sv_stats_json
         sniffles_vcf = called.vcf
+//for survivor merging 
+    sniffles_vcf = called.sniffles_vcf
+    cutesv_vcf   = called.cutesv_vcf
+    svim_vcf     = called.svim_vcf
+
+    consensus_vcf = MERGE_SVS.out.consensus_vcf
         for_phasing = final_vcf
 }
 
@@ -165,18 +183,6 @@ RUN_SVIM(
     genome_build
 )
 }
-
-//to apply SURVIVOR merging
-merged_input =
-    sniffles_vcf
-        .join(RUN_CUTESV.out.vcf, by:0)
-        .join(RUN_SVIM.out.vcf, by:0)
-        .map { meta, sniffles, cutesv, svim ->
-            [meta, sniffles, cutesv, svim]
-        }
-
-MERGE_SVS(merged_input)
-
         filterCalls_sv(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
         sortVCF(filterCalls_sv.out.vcf)
 
