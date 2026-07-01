@@ -20,9 +20,9 @@ class Pinguscript {
     }
     // Shared handler to construct a ping JSON and send it
     private static String wf_ping(nextflow, workflow, event, error_message, params) {
-        if (params.disable_ping) {
-            return "{}"
-        }
+if (params == null || params.disable_ping) {
+    return "{}"
+}
         def body_json = make_wf_ping(nextflow, workflow, event, error_message, params)
         send_ping_post("epilaby", body_json)
     }
