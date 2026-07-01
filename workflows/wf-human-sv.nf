@@ -15,8 +15,8 @@ include {
     annotate_vcf as annotate_sv_vcf;
     haploblocks as haploblocks_sv
 } from '../modules/local/common.nf'
-
 workflow bam {
+
     take:
         bam_channel
         reference
@@ -26,67 +26,114 @@ workflow bam {
         genome_build
         chromosome_codes
         workflow_params
+
     main:
-        called = variantCall(bam_channel, reference, target, mosdepth_stats, optional_file, genome_build, chromosome_codes)
-//for survivor merging 
-if (params.cutesv && params.svim) {
 
-    merged_input =
-        called.sniffles_vcf
-            .join(called.cutesv_vcf, by:0)
-            .join(called.svim_vcf, by:0)
-            .map { meta, sniffles, cutesv, svim ->
-                [meta, sniffles, cutesv, svim]
-}
+        called = variantCall(
+            bam_channel,
+            reference,
+            target,
+            mosdepth_stats,
+            optional_file,
+            genome_build,
+            chromosome_codes
+        )
 
-    MERGE_SVS(merged_input)
-}
-        // benchmark
+        /*
+         * Optional SURVIVOR consensus
+         */
+        if (params.cutesv && params.svim) {
+
+            merged_input =
+                called.sniffles_vcf
+                    .join(called.cutesv_vcf, by:0)
+                    .join(called.svim_vcf, by:0)
+                    .map { meta, sniffles, cutesv, svim ->
+                        [meta, sniffles, cutesv, svim]
+                    }
+
+            MERGE_SVS(merged_input)
+
+            consensus_vcf = MERGE_SVS.out.consensus_vcf
+        }
+        else {
+            consensus_vcf = Channel.empty()
+        }
+
+
+        /*
+         * Benchmark
+         */
         if (params.sv_benchmark) {
-            maybe_benchmark_result = runBenchmark(called.vcf, reference, target)
+            maybe_benchmark_result =
+                runBenchmark(called.vcf, reference, target)
         }
         else {
             maybe_benchmark_result = Channel.empty()
         }
 
-        if (!params.annotation) {
-            final_vcf = called.vcf.join(called.vcf_index)
 
-            report = runReport(
-                called.vcf.groupTuple(),
-                maybe_benchmark_result.ifEmpty(optional_file),
-                workflow_params
-            )
+        /*
+         * Annotation
+         */
+        if (!params.annotation) {
+
+            final_vcf =
+                called.vcf.join(called.vcf_index)
+
+            report =
+                runReport(
+                    called.vcf.groupTuple(),
+                    maybe_benchmark_result.ifEmpty(optional_file),
+                    workflow_params
+                )
         }
         else {
-            // append '*' to indicate that annotation should be performed on all chr at once
-            vcf_for_annotation = called.vcf.join(called.vcf_index).map{ it << '*' }
-            // annotate with SnpEff
-            final_vcf = annotate_sv_vcf(vcf_for_annotation, genome_build, "sv").annot_vcf
-            report = runReport(
-                final_vcf.map{meta, vcf, tbi -> [meta, vcf]}.groupTuple(),
-                maybe_benchmark_result.ifEmpty(optional_file),
-                workflow_params
-            )
+
+            vcf_for_annotation =
+                called.vcf
+                    .join(called.vcf_index)
+                    .map { it << '*' }
+
+            final_vcf =
+                annotate_sv_vcf(
+                    vcf_for_annotation,
+                    genome_build,
+                    "sv"
+                ).annot_vcf
+
+            report =
+                runReport(
+                    final_vcf
+                        .map { meta, vcf, tbi -> [meta, vcf] }
+                        .groupTuple(),
+                    maybe_benchmark_result.ifEmpty(optional_file),
+                    workflow_params
+                )
         }
 
-        // Prepare stuff to emit
+
+        /*
+         * Outputs
+         */
         sv_stats_json = report.json
-        report = report.html.concat(
-            final_vcf.map{meta, vcf, tbi -> [vcf, tbi]},
-            maybe_benchmark_result
-        )
-    
+
+        report =
+            report.html.concat(
+                final_vcf.map { meta, vcf, tbi -> [vcf, tbi] },
+                maybe_benchmark_result
+            )
+
     emit:
+
         report = report
         sv_stats_json = sv_stats_json
-        sniffles_vcf = called.vcf
-//for survivor merging 
-    sniffles_vcf = called.sniffles_vcf
-    cutesv_vcf   = called.cutesv_vcf
-    svim_vcf     = called.svim_vcf
 
-    consensus_vcf = MERGE_SVS.out.consensus_vcf
+        sniffles_vcf = called.sniffles_vcf
+        cutesv_vcf   = called.cutesv_vcf
+        svim_vcf     = called.svim_vcf
+        consensus_vcf = consensus_vcf
+
         for_phasing = final_vcf
 }
 
@@ -183,30 +230,15 @@ RUN_SVIM(
     genome_build
 )
 }
-//after SURVIVOR merging
-merged_input =
-    sniffles2.out.vcf
-        .join(RUN_CUTESV.out.vcf, by:0)
-        .join(RUN_SVIM.out.vcf, by:0)
-        .map { meta, sniffles, cutesv, svim ->
-            [meta, sniffles, cutesv, svim]
-        }
-
-MERGE_SVS(merged_input)
-
-        filterCalls_sv(sniffles2.out.vcf, mosdepth_stats, target_bed, chromosome_codes)
-        sortVCF(filterCalls_sv.out.vcf)
 
     emit:
         vcf = sortVCF.out.vcf_gz
         vcf_index = sortVCF.out.vcf_tbi
 
-//after SURVIVOR merging
     sniffles_vcf = sniffles2.out.vcf
     cutesv_vcf = RUN_CUTESV.out.vcf
     svim_vcf = RUN_SVIM.out.vcf
-    consensus_vcf = MERGE_SVS.out.consensus_vcf
-}
+
 
 workflow runReport {
     take:
