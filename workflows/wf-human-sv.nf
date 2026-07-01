@@ -190,6 +190,7 @@ workflow runBenchmark {
 
 
 workflow variantCall {
+
     take:
         bam_channel
         reference
@@ -198,12 +199,14 @@ workflow variantCall {
         optional_file
         genome_build
         chromosome_codes
+
     main:
 
-        // tandom_repeat bed
-        if(params.tr_bed) {
+        // tandem repeat BED
+        if (params.tr_bed) {
             tr_bed = Channel.fromPath(params.tr_bed, checkIfExists: true)
-        } else {
+        }
+        else {
             tr_bed = optional_file
         }
 
@@ -211,33 +214,55 @@ workflow variantCall {
             genome_build = Channel.of(null)
         }
 
-        sniffles2(bam_channel, tr_bed, reference, genome_build)
-// ADD HERE
-if (params.cutesv) {
-    RUN_CUTESV(
-    bam_channel,
-    tr_bed,
-    reference,
-    genome_build
-)
-}
+        // Run Sniffles
+        sniffles2(
+            bam_channel,
+            tr_bed,
+            reference,
+            genome_build
+        )
 
-if (params.svim) {
-RUN_SVIM(
-    bam_channel,
-    tr_bed,
-    reference,
-    genome_build
-)
-}
+        // Optional callers
+        if (params.cutesv) {
+            RUN_CUTESV(
+                bam_channel,
+                tr_bed,
+                reference,
+                genome_build
+            )
+        }
+
+        if (params.svim) {
+            RUN_SVIM(
+                bam_channel,
+                tr_bed,
+                reference,
+                genome_build
+            )
+        }
+
+        // Existing Sniffles pipeline
+        filterCalls_sv(
+            sniffles2.out.vcf,
+            mosdepth_stats,
+            target_bed,
+            chromosome_codes
+        )
+
+        sortVCF(
+            filterCalls_sv.out.vcf
+        )
 
     emit:
+
+        // Existing workflow output
         vcf = sortVCF.out.vcf_gz
         vcf_index = sortVCF.out.vcf_tbi
 
-    sniffles_vcf = sniffles2.out.vcf
-    cutesv_vcf = RUN_CUTESV.out.vcf
-    svim_vcf = RUN_SVIM.out.vcf
+        // Additional outputs
+        sniffles_vcf = sniffles2.out.vcf
+        cutesv_vcf   = RUN_CUTESV.out.vcf
+        svim_vcf     = RUN_SVIM.out.vcf
 }
 
 workflow runReport {
