@@ -238,7 +238,7 @@ RUN_SVIM(
     sniffles_vcf = sniffles2.out.vcf
     cutesv_vcf = RUN_CUTESV.out.vcf
     svim_vcf = RUN_SVIM.out.vcf
-
+}
 
 workflow runReport {
     take:
