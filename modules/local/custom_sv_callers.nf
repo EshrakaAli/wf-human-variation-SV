@@ -83,7 +83,7 @@ process MERGE_SVS {
         1 \
         0 \
         30 \
-        ${meta.alias}.survivor.vcf
+        ${meta.alias}.consensus.vcf
     """
 }
 
