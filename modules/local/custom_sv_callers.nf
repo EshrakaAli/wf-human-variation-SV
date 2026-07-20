@@ -56,8 +56,6 @@ process RUN_SVIM {
         -s sample.txt \
         -o ${xam_meta.alias}.svim.vcf \
         dir_svim/variants.vcf
-
-    mv dir_svim/variants.vcf ${xam_meta.alias}.svim.vcf
     """
 }
 process MERGE_SVS {
