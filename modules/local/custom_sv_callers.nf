@@ -23,7 +23,7 @@ process RUN_CUTESV {
         tmp_dir \
         --threads ${task.cpus} \
         --max_cluster_bias_INS 1000 \
-        --sample ${xam_meta.alias} \
+        --sample ${xam_meta.alias}_cutesv \
         --diff_ratio_merging_INS 0.3
 
     """
