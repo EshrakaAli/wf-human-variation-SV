@@ -49,6 +49,12 @@ process RUN_SVIM {
         dir_svim \
         ${xam} \
         ${ref}
+    echo "${xam_meta.alias}" > sample.txt
+
+    bcftools reheader \
+        -s sample.txt \
+        -o ${xam_meta.alias}.svim.vcf \
+        dir_svim/variants.vcf
 
     mv dir_svim/variants.vcf ${xam_meta.alias}.svim.vcf
     """
