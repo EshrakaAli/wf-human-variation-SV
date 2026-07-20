@@ -89,7 +89,7 @@ process MERGE_SVS {
 
 process MERGE_JASMINE {
 
-    container "YOUR_JASMINE_CONTAINER"
+    label "wgs"
     publishDir "${params.out_dir}/jasmine_consensus", mode: 'copy'
 
     input:
@@ -106,7 +106,7 @@ process MERGE_JASMINE {
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
 
-    jasmine \
+    java -jar /home/eshraka/tools/Jasmine/jasmine.jar \
         file_list=vcf_list.txt \
         out_file=${meta.alias}.jasmine.vcf \
         genome_file=${ref} \
