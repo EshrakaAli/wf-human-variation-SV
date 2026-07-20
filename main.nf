@@ -753,7 +753,8 @@ if(params.svim){
     )
 }
 
-if(params.cutesv && params.svim){
+// Merge caller outputs
+if (params.cutesv && params.svim) {
 
     merged_input =
         sniffles_vcf
@@ -763,11 +764,17 @@ if(params.cutesv && params.svim){
                 [meta, sniffles, cutesv, svim]
             }
 
+    // SURVIVOR
     MERGE_SVS(merged_input)
-
     consensus_vcf = MERGE_SVS.out.consensus_vcf
-}
 
+    // Jasmine
+    MERGE_JASMINE(
+        merged_input,
+        ref_channel
+    )
+    jasmine_vcf = MERGE_JASMINE.out.jasmine_vcf
+}
         json_sv = results_sv.sv_stats_json
         sv_vcf = results_sv.for_phasing
         output_sv(artifacts)
