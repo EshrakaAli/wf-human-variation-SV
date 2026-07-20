@@ -49,6 +49,7 @@ process RUN_SVIM {
         dir_svim \
         ${xam} \
         ${ref}
+
     echo "${xam_meta.alias}" > sample.txt
 
     bcftools reheader \
