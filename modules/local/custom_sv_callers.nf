@@ -72,7 +72,7 @@ process MERGE_SVS {
     SURVIVOR merge \
         vcf_list.txt \
         1000 \
-        2 \
+        1 \
         1 \
         1 \
         0 \
