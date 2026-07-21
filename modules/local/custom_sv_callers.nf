@@ -44,8 +44,6 @@ process RUN_SVIM {
 
     script:
     """
-script:
-"""
 svim alignment \
     dir_svim \
     ${xam} \
