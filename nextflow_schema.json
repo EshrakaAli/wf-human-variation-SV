@@ -47,6 +47,11 @@
     "description": "Run SVIM structural variant caller.",
     "default": false
 },
+ "jasmine": {
+  "type": "string",
+  "description": "Path to Jasmine JAR",
+  "default": "/home/eshraka/tools/Jasmine/jasmine.jar"
+},
                 "snp": {
                     "title": "SNP: Small variants",
                     "type": "boolean",
