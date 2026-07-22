@@ -88,7 +88,8 @@ process MERGE_JASMINE {
     publishDir "${params.out_dir}/jasmine_consensus", mode: 'copy'
 
     input:
-    tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
+path jasmineJar    
+tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
     tuple path(ref), path(ref_idx), path(ref_cache), env(REF_PATH)
 
     output:
@@ -101,7 +102,7 @@ process MERGE_JASMINE {
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
 
-    java -jar ${params.jasmine} \
+    java -jar ${jasmineJar} \
         file_list=vcf_list.txt \
         out_file=${meta.alias}.jasmine.vcf \
         genome_file=${ref} \
