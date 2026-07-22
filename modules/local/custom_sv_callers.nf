@@ -83,17 +83,14 @@ process MERGE_SVS {
 }
 
 params.jasmine = "/home/eshraka/tools/Jasmine/jasmine.jar"
+
 process MERGE_JASMINE {
 
-    label "wgs"
-    publishDir "${params.out_dir}/jasmine_consensus", mode: 'copy'
+    ...
 
     input:
-    path jasmine_jar, tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
+    tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
     tuple path(ref), path(ref_idx), path(ref_cache), env(REF_PATH)
-
-    output:
-    tuple val(meta), path("${meta.alias}.jasmine.vcf"), emit: jasmine_vcf
 
     script:
     """
@@ -102,7 +99,7 @@ process MERGE_JASMINE {
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
 
-    java -jar ${jasmine_jar} \
+    java -jar ${params.jasmine} \
         file_list=vcf_list.txt \
         out_file=${meta.alias}.jasmine.vcf \
         genome_file=${ref} \
