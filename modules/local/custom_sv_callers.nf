@@ -85,9 +85,6 @@ process MERGE_SVS {
 params.jasmine = "/home/eshraka/tools/Jasmine/jasmine.jar"
 
 process MERGE_JASMINE {
-
-    ...
-
     input:
     tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
     tuple path(ref), path(ref_idx), path(ref_cache), env(REF_PATH)
