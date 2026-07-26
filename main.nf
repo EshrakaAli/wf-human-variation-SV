@@ -769,12 +769,7 @@ if (params.cutesv && params.svim) {
     consensus_vcf = MERGE_SVS.out.consensus_vcf
 
     // Jasmine
-Channel
-    .fromPath(params.jasmine)
-    .set { jasmine_ch }
-
 MERGE_JASMINE(
-    jasmine_ch,
     merged_input,
     ref_channel
 )
