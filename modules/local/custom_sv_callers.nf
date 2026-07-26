@@ -83,7 +83,7 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
- container 'biocontainers/jasmine:latest'
+ container 'ontresearch/wf-human-variation:sha8ecee6d351b0c2609b452f3a368c390587f6662d'
     input:
     tuple val(meta),
           path(cutesv_vcf),
