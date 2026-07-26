@@ -84,11 +84,12 @@ process MERGE_SVS {
 
 process MERGE_JASMINE {
 
-container "jasmine:1.1.5"
+    container "jasmine:1.1.5"
+
     label "wgs"
     publishDir "${params.out_dir}/jasmine_consensus", mode: 'copy'
 
-    input:   
+    input:
     tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
     tuple path(ref), path(ref_idx), path(ref_cache), env(REF_PATH)
 
@@ -102,11 +103,11 @@ container "jasmine:1.1.5"
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
 
-java -jar /opt/jasmine/jasmine.jar \
-    file_list=vcf_list.txt \
-    out_file=${meta.alias}.jasmine.vcf \
-    genome_file=${ref} \
-    max_dist=1000 \
-    min_support=1
+    java -jar /opt/jasmine/jasmine.jar \
+        file_list=vcf_list.txt \
+        out_file=${meta.alias}.jasmine.vcf \
+        genome_file=${ref} \
+        max_dist=1000 \
+        min_support=1
     """
 }
