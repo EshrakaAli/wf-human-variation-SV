@@ -179,19 +179,19 @@ process MERGE_JASMINE {
     output:
     path "${sample_id}.merged.vcf"
 
-    script:
-    """
-    cat > vcf_list.txt <<EOF
-    ${cutesv_vcf}
-    ${svim_vcf}
-    ${sniffles_vcf}
-    EOF
+script:
+"""
+printf "%s\n" \
+${sniffles_vcf} \
+${cutesv_vcf} \
+${svim_vcf} > vcf_list.txt
 
-    jasmine \
-        file_list=vcf_list.txt \
-        out_file=${sample_id}.merged.vcf \
-        max_dist=1000 \
-        threads=${task.cpus}
-    """
+jasmine \
+    file_list=vcf_list.txt \
+    out_file=${sample_id}.jasmine.vcf \
+    genome_file=${ref} \
+    max_dist=1000 \
+    min_support=1
+"""
 }
 
