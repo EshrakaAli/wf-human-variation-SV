@@ -85,6 +85,7 @@ process MERGE_SVS {
 process MERGE_JASMINE {
 
     container "jasmine:1.1.5"
+
     input:
     tuple val(meta),
           path(cutesv_vcf),
@@ -96,18 +97,18 @@ process MERGE_JASMINE {
     output:
     path "${meta.alias}.jasmine.vcf", emit: jasmine_vcf
 
-script:
-"""
-printf "%s\n" \
-${svim_vcf} \
-${sniffles_vcf} \
-${cutesv_vcf} > vcf_list.txt
+    script:
+    """
+    printf "%s\n" \
+    ${cutesv_vcf} \
+    ${svim_vcf} \
+    ${sniffles_vcf} > vcf_list.txt
 
-java -jar /home/eshraka/Jasmine-1.1.5/jasmine.jar\
-    file_list=vcf_list.txt \
-    out_file=${meta.alias}.jasmine.vcf \
-    genome_file=${ref} \
-    max_dist=1000 \
-    min_support=1
-"""
+    jasmine \
+        file_list=vcf_list.txt \
+        out_file=${meta.alias}.jasmine.vcf \
+        genome_file=${ref} \
+        max_dist=1000 \
+        min_support=1
+    """
 }
