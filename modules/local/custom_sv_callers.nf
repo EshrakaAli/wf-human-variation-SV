@@ -88,9 +88,8 @@ container "jasmine:1.1.5"
     label "wgs"
     publishDir "${params.out_dir}/jasmine_consensus", mode: 'copy'
 
-    input:
-path jasmineJar    
-tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
+    input:   
+    tuple val(meta), path(sniffles_vcf), path(cutesv_vcf), path(svim_vcf)
     tuple path(ref), path(ref_idx), path(ref_cache), env(REF_PATH)
 
     output:
