@@ -770,11 +770,13 @@ if (params.cutesv && params.svim) {
     consensus_vcf = MERGE_SVS.out.consensus_vcf
 
     // Jasmine
+jasmine_input = merged_input.combine(ref_channel)
+
 MERGE_JASMINE(
-    merged_input,
-    jasmine_ref_channel
+    jasmine_input
 )
-    jasmine_vcf = MERGE_JASMINE.out.jasmine_vcf
+
+jasmine_vcf = MERGE_JASMINE.out.jasmine_vcf
 }
         json_sv = results_sv.sv_stats_json
         sv_vcf = results_sv.for_phasing
