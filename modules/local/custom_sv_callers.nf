@@ -90,11 +90,12 @@ process MERGE_JASMINE {
     tuple val(sample_id),
           path(cutesv_vcf),
           path(svim_vcf),
-          path(sniffles_vcf),
-          path(ref)
+          path(sniffles_vcf)
 
-output:
-path "${sample_id}.jasmine.vcf", emit: jasmine_vcf
+    path ref
+
+    output:
+    path "${sample_id}.jasmine.vcf", emit: jasmine_vcf
 
     script:
     """
@@ -108,7 +109,7 @@ path "${sample_id}.jasmine.vcf", emit: jasmine_vcf
         out_file=${sample_id}.jasmine.vcf \
         genome_file=${ref} \
         max_dist=1000 \
-        min_support=1
+        min_support=2
     """
 }
 
