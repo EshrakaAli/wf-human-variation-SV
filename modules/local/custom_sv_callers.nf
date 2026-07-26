@@ -87,7 +87,7 @@ process MERGE_JASMINE {
     container "jasmine:1.1.5"
 
     input:
-    tuple val(sample_id),
+    tuple val(meta),
           path(cutesv_vcf),
           path(svim_vcf),
           path(sniffles_vcf)
@@ -95,18 +95,18 @@ process MERGE_JASMINE {
     path ref
 
     output:
-    path "${sample_id}.jasmine.vcf", emit: jasmine_vcf
+    path "${meta.alias}.jasmine.vcf", emit: jasmine_vcf
 
     script:
     """
     printf "%s\n" \
+    ${svim_vcf} \
     ${sniffles_vcf} \
-    ${cutesv_vcf} \
-    ${svim_vcf} > vcf_list.txt
+    ${cutesv_vcf} > vcf_list.txt
 
     jasmine \
         file_list=vcf_list.txt \
-        out_file=${sample_id}.jasmine.vcf \
+        out_file=${meta.alias}.jasmine.vcf \
         genome_file=${ref} \
         max_dist=1000 \
         min_support=1
