@@ -83,7 +83,7 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
- container 'quay.io/biocontainers/jasmine:1.2.1--pyhdfd78af_0'
+ container 'biocontainers/jasmine:latest'
     input:
     tuple val(meta),
           path(cutesv_vcf),
