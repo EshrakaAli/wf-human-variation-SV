@@ -109,7 +109,7 @@ process MERGE_JASMINE {
         out_file=${sample_id}.jasmine.vcf \
         genome_file=${ref} \
         max_dist=1000 \
-        min_support=2
+        min_support=1
     """
 }
 
