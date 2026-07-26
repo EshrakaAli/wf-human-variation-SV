@@ -84,19 +84,20 @@ process MERGE_SVS {
 
 process MERGE_JASMINE {
 
-    tag "$meta.alias"
-
     container "eshrakaali/jasmine:1.1.5"
+    containerOptions '--user 1118:1118'
 
     input:
     tuple val(meta),
           path(sniffles_vcf),
           path(cutesv_vcf),
           path(svim_vcf),
-          path(ref)
+          path(ref),
+          path(ref_idx),
+          path(ref_cache)
 
     output:
-    tuple val(meta), path("${meta.alias}.jasmine.vcf"), emit: jasmine_vcf
+    path "${meta.alias}.jasmine.vcf", emit: jasmine_vcf
 
     script:
     """
@@ -104,9 +105,6 @@ process MERGE_JASMINE {
         ${sniffles_vcf} \
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
-
-    echo "Jasmine input:"
-    cat vcf_list.txt
 
     jasmine \
         file_list=vcf_list.txt \
