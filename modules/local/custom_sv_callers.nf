@@ -88,11 +88,10 @@ process MERGE_JASMINE {
 
     input:
     tuple val(meta),
+          path(sniffles_vcf),
           path(cutesv_vcf),
           path(svim_vcf),
-          path(sniffles_vcf)
-
-    path ref
+          path(ref)
 
     output:
     path "${meta.alias}.jasmine.vcf", emit: jasmine_vcf
@@ -100,15 +99,16 @@ process MERGE_JASMINE {
     script:
     """
     printf "%s\n" \
-    ${cutesv_vcf} \
-    ${svim_vcf} \
-    ${sniffles_vcf} > vcf_list.txt
+        ${sniffles_vcf} \
+        ${cutesv_vcf} \
+        ${svim_vcf} > vcf_list.txt
 
     jasmine \
         file_list=vcf_list.txt \
         out_file=${meta.alias}.jasmine.vcf \
         genome_file=${ref} \
         max_dist=1000 \
-        min_support=1
+        min_support=1 \
+        --normalize_type
     """
 }
