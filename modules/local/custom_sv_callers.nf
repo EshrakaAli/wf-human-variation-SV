@@ -177,8 +177,8 @@ process MERGE_JASMINE {
           path(sniffles_vcf),
           path(ref)
 
-    output:
-    path "${sample_id}.jasmine.vcf"
+output:
+path "${sample_id}.jasmine.vcf", emit: jasmine_vcf
 
     script:
     """
