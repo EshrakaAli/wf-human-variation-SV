@@ -174,24 +174,25 @@ process MERGE_JASMINE {
     tuple val(sample_id),
           path(cutesv_vcf),
           path(svim_vcf),
-          path(sniffles_vcf)
+          path(sniffles_vcf),
+          path(ref)
 
     output:
-    path "${sample_id}.merged.vcf"
+    path "${sample_id}.jasmine.vcf"
 
-script:
-"""
-printf "%s\n" \
-${sniffles_vcf} \
-${cutesv_vcf} \
-${svim_vcf} > vcf_list.txt
+    script:
+    """
+    printf "%s\n" \
+    ${sniffles_vcf} \
+    ${cutesv_vcf} \
+    ${svim_vcf} > vcf_list.txt
 
-jasmine \
-    file_list=vcf_list.txt \
-    out_file=${sample_id}.jasmine.vcf \
-    genome_file=${ref} \
-    max_dist=1000 \
-    min_support=1
-"""
+    jasmine \
+        file_list=vcf_list.txt \
+        out_file=${sample_id}.jasmine.vcf \
+        genome_file=${ref} \
+        max_dist=1000 \
+        min_support=1
+    """
 }
 
