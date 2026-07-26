@@ -83,7 +83,7 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
-container "quay.io/biocontainers/jasmine:1.1--hdfd78af_1"
+
     input:
     tuple val(meta),
           path(cutesv_vcf),
@@ -102,7 +102,7 @@ ${svim_vcf} \
 ${sniffles_vcf} \
 ${cutesv_vcf} > vcf_list.txt
 
-jasmine \
+java -jar /home/eshraka/Jasmine-1.1.5/jasmine.jar\
     file_list=vcf_list.txt \
     out_file=${meta.alias}.jasmine.vcf \
     genome_file=${ref} \
