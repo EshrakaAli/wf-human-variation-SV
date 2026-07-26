@@ -211,6 +211,8 @@ workflow {
     | flatten
     | buffer(size: 4)
 
+jasmine_ref_channel = Channel.value(ref)
+
     // ************************************************************************
     // Bail from the workflow for a reason we should have already specified
     if (!can_start){
