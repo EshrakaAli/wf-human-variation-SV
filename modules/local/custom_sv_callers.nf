@@ -87,14 +87,15 @@ process MERGE_JASMINE {
     container "eshrakaali/jasmine:1.1.5"
     containerOptions '--user 1118:1118'
 
-    input:
-    tuple val(meta),
-          path(sniffles_vcf),
-          path(cutesv_vcf),
-          path(svim_vcf),
-          path(ref),
-          path(ref_idx),
-          path(ref_cache)
+input:
+tuple val(meta),
+      path(sniffles_vcf),
+      path(cutesv_vcf),
+      path(svim_vcf),
+      path(ref),
+      path(ref_idx),
+      path(ref_cache),
+      env(REF_PATH)
 
     output:
     path "${meta.alias}.jasmine.vcf", emit: jasmine_vcf
