@@ -106,13 +106,13 @@ process MERGE_JASMINE {
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
 
-    jasmine \
-        file_list=vcf_list.txt \
-        out_file=${meta.alias}.jasmine.vcf \
-        genome_file=${ref} \
-        max_dist=5000 \
-        min_support=1 \
-        --normalize_type \
-        --normalize_chrs
+java -jar /opt/jasmine/jasmine.jar \
+    file_list=vcf_list.txt \
+    out_file=${meta.alias}.jasmine.vcf \
+    genome_file=${ref} \
+    max_dist=5000 \
+    min_support=1 \
+    --normalize_type \
+    --normalize_chrs
     """
 }
