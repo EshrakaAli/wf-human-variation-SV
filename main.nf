@@ -773,7 +773,7 @@ if (params.cutesv && params.svim) {
     // Jasmine
 MERGE_JASMINE(
     merged_input,
-    ref_channel
+    jasmine_ref_channel
 )
     jasmine_vcf = MERGE_JASMINE.out.jasmine_vcf
 }
