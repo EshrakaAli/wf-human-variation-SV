@@ -83,7 +83,7 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
- container = 'my-jasmine:latest'
+container = 'jasmine:1.1.5'
     input:
     tuple val(meta),
           path(cutesv_vcf),
