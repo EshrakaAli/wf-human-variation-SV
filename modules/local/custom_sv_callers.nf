@@ -122,4 +122,3 @@ process MERGE_JASMINE {
     fi
     """
 }
-}
