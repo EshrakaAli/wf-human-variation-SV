@@ -83,7 +83,7 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
-    container 'eshrakaali/jasmine:1.1.5'
+    container 'eshrakaali/jasmine:1.1.7'
     containerOptions '--entrypoint=""'
 
     input:
