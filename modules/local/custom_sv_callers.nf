@@ -82,6 +82,8 @@ process MERGE_SVS {
     """
 }
 
+// modules/local/custom_sv_callers.nf
+
 process MERGE_JASMINE {
     container 'eshrakaali/jasmine:1.1.5'
     
@@ -91,28 +93,39 @@ process MERGE_JASMINE {
     val sample
     
     output:
-    path "${sample}.jasmine.vcf"
+    path "${sample}.jasmine.vcf", emit: jasmine_vcf
     
     script:
+    def vcf_list = vcf_files.collect{ it.getName() }.join(',')
+    
     """
-    # Create file list properly - one file per line without extra spaces
+    echo "Processing sample: ${sample}"
+    echo "VCF files: ${vcf_list}"
+    echo "Genome file: ${genome}"
+    
+    # Check if VCF files exist and have content
     for vcf in ${vcf_files.join(' ')}; do
-        echo "\$vcf" >> vcf_list.txt
+        if [ ! -f "\$vcf" ]; then
+            echo "ERROR: VCF file not found: \$vcf"
+            exit 1
+        fi
+        VAR_COUNT=\$(grep -v "^#" \$vcf | wc -l)
+        echo "Found VCF: \$vcf (variants: \$VAR_COUNT)"
+        if [ \$VAR_COUNT -eq 0 ]; then
+            echo "WARNING: \$vcf has no variants"
+        fi
     done
     
-    # Debug: Show the file list
-    echo "File list contents:"
-    cat vcf_list.txt
-    
-    # Run Jasmine
+    # Run Jasmine with comma-separated file list
     jasmine \
-        file_list=vcf_list.txt \
+        --comma_filelist ${vcf_list} \
         out_file=${sample}.jasmine.vcf \
         genome_file=${genome} \
         max_dist=5000 \
         min_support=1 \
         --normalize_type \
-        --normalize_chrs
+        --normalize_chrs \
+        --default_zero_genotype
     
     # Check if output was created
     if [ ! -f ${sample}.jasmine.vcf ]; then
@@ -120,5 +133,8 @@ process MERGE_JASMINE {
         ls -la
         exit 1
     fi
+    
+    echo "Successfully created ${sample}.jasmine.vcf"
+    echo "Merged variants: \$(grep -v "^#" ${sample}.jasmine.vcf | wc -l)"
     """
 }
