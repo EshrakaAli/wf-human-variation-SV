@@ -105,6 +105,17 @@ process MERGE_JASMINE {
     echo "Input VCFs:"
     cat vcf_list.txt
 
+set -euxo pipefail
+
+echo "Java version:"
+java -version
+
+echo "Jasmine jar:"
+ls -lh /opt/jasmine/jasmine.jar
+
+echo "Input files:"
+cat vcf_list.txt
+
 java -jar /opt/jasmine/jasmine.jar \
     file_list=vcf_list.txt \
     out_file=${meta.alias}.jasmine.vcf \
@@ -114,5 +125,7 @@ java -jar /opt/jasmine/jasmine.jar \
     --normalize_type \
     --normalize_chrs \
     --default_zero_genotype
-    """
+
+echo "Output:"
+ls -lh
 }
