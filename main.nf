@@ -773,21 +773,16 @@ if (params.cutesv && params.svim) {
 jasmine_input =
     merged_input
         .combine(jasmine_ref_channel)
-        .map { data, genome ->
-            tuple(
-                data[0],   // meta
-                data[1],   // sniffles
-                data[2],   // cutesv
-                data[3],   // svim
-                genome
-            )
+        .map { meta, sniffles, cutesv, svim, genome ->
+            tuple(meta, sniffles, cutesv, svim, genome)
         }
 
 MERGE_JASMINE(jasmine_input)
 
 jasmine_vcf = MERGE_JASMINE.out.jasmine_vcf
 }
-        json_sv = results_sv.sv_stats_json
+
+       json_sv = results_sv.sv_stats_json
         sv_vcf = results_sv.for_phasing
         output_sv(artifacts)
     } else {
