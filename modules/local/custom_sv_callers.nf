@@ -105,14 +105,14 @@ process MERGE_JASMINE {
     echo "Input VCFs:"
     cat vcf_list.txt
 
-    jasmine \
-        file_list=vcf_list.txt \
-        out_file=${meta.alias}.jasmine.vcf \
-        genome_file=${genome} \
-        max_dist=5000 \
-        min_support=1 \
-        --normalize_type \
-        --normalize_chrs \
-        --default_zero_genotype
+java -jar /opt/jasmine/jasmine.jar \
+    file_list=vcf_list.txt \
+    out_file=${meta.alias}.jasmine.vcf \
+    genome_file=${genome} \
+    max_dist=5000 \
+    min_support=1 \
+    --normalize_type \
+    --normalize_chrs \
+    --default_zero_genotype
     """
 }
