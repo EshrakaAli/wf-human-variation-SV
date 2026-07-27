@@ -83,37 +83,39 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
-
-    container "eshrakaali/jasmine:1.1.5"
-    containerOptions '--user 1118:1118'
-
-input:
-tuple val(meta),
-      path(sniffles_vcf),
-      path(cutesv_vcf),
-      path(svim_vcf),
-      path(ref),
-      path(ref_idx),
-      path(ref_cache),
-      env(REF_PATH)
-
+    container 'eshrakaali/jasmine:1.1.5'
+    
+    input:
+    path vcf_files
+    path genome
+    val sample
+    
     output:
-    path "${meta.alias}.jasmine.vcf", emit: jasmine_vcf
-
+    path "${sample}.jasmine.vcf"
+    
     script:
     """
-    printf "%s\n" \
-        ${sniffles_vcf} \
-        ${cutesv_vcf} \
-        ${svim_vcf} > vcf_list.txt
-
-java -jar /opt/jasmine/jasmine.jar \
-    file_list=vcf_list.txt \
-    out_file=${meta.alias}.jasmine.vcf \
-    genome_file=${ref} \
-    max_dist=5000 \
-    min_support=1 \
-    --normalize_type \
-    --normalize_chrs
+    # Create file list with proper formatting
+    printf "%s\n" ${vcf_files.join(' ')} > vcf_list.txt
+    
+    # Debug: Show the file list
+    echo "File list contents:"
+    cat vcf_list.txt
+    
+    jasmine \
+        file_list=vcf_list.txt \
+        out_file=${sample}.jasmine.vcf \
+        genome_file=${genome} \
+        max_dist=5000 \
+        min_support=1 \
+        --normalize_type \
+        --normalize_chrs
+    
+    # Check if output was created
+    if [ ! -f ${sample}.jasmine.vcf ]; then
+        echo "ERROR: ${sample}.jasmine.vcf not created!"
+        ls -la
+        exit 1
+    fi
     """
 }
