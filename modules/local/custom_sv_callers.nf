@@ -97,35 +97,38 @@ process MERGE_JASMINE {
 
     script:
     """
+    set -euxo pipefail
+
     printf "%s\n" \
         ${sniffles_vcf} \
         ${cutesv_vcf} \
         ${svim_vcf} > vcf_list.txt
 
+    echo "Java version:"
+    java -version
+
+    echo "Jasmine jar:"
+    ls -lh /opt/jasmine/jasmine.jar
+
     echo "Input VCFs:"
     cat vcf_list.txt
 
-set -euxo pipefail
+    java -jar /opt/jasmine/jasmine.jar \
+        file_list=vcf_list.txt \
+        out_file=${meta.alias}.jasmine.vcf \
+        genome_file=${genome} \
+        max_dist=5000 \
+        min_support=1 \
+        --normalize_type \
+        --normalize_chrs \
+        --default_zero_genotype
 
-echo "Java version:"
-java -version
+    echo "Output files:"
+    ls -lh
 
-echo "Jasmine jar:"
-ls -lh /opt/jasmine/jasmine.jar
-
-echo "Input files:"
-cat vcf_list.txt
-
-java -jar /opt/jasmine/jasmine.jar \
-    file_list=vcf_list.txt \
-    out_file=${meta.alias}.jasmine.vcf \
-    genome_file=${genome} \
-    max_dist=5000 \
-    min_support=1 \
-    --normalize_type \
-    --normalize_chrs \
-    --default_zero_genotype
-
-echo "Output:"
-ls -lh
+    if [ ! -f ${meta.alias}.jasmine.vcf ]; then
+        echo "ERROR: Jasmine did not produce ${meta.alias}.jasmine.vcf"
+        exit 1
+    fi
+    """
 }
