@@ -95,13 +95,16 @@ process MERGE_JASMINE {
     
     script:
     """
-    # Create file list with proper formatting
-    printf "%s\n" ${vcf_files.join(' ')} > vcf_list.txt
+    # Create file list properly - one file per line without extra spaces
+    for vcf in ${vcf_files.join(' ')}; do
+        echo "\$vcf" >> vcf_list.txt
+    done
     
     # Debug: Show the file list
     echo "File list contents:"
     cat vcf_list.txt
     
+    # Run Jasmine
     jasmine \
         file_list=vcf_list.txt \
         out_file=${sample}.jasmine.vcf \
@@ -118,4 +121,5 @@ process MERGE_JASMINE {
         exit 1
     fi
     """
+}
 }
