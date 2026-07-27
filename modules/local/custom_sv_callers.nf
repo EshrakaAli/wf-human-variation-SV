@@ -87,10 +87,12 @@ process MERGE_SVS {
 process MERGE_JASMINE {
     container 'eshrakaali/jasmine:1.1.5'
     
-    input:
-    path vcf_files
-    path genome
-    val sample
+input:
+tuple val(meta),
+      path(sniffles_vcf),
+      path(cutesv_vcf),
+      path(svim_vcf),
+      path(genome)
     
     output:
     path "${sample}.jasmine.vcf", emit: jasmine_vcf
