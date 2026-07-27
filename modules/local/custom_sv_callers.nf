@@ -84,6 +84,7 @@ process MERGE_SVS {
 
 // modules/local/custom_sv_callers.nf
 
+cat > /home/eshraka/.nextflow/assets/EshrakaAli/wf-human-variation-SV/modules/local/custom_sv_callers.nf << 'EOF'
 process MERGE_JASMINE {
     container 'eshrakaali/jasmine:1.1.5'
     
@@ -135,6 +136,10 @@ process MERGE_JASMINE {
     fi
     
     echo "Successfully created ${sample}.jasmine.vcf"
+    echo "Merged variants: \$(grep -v "^#" ${sample}.jasmine.vcf | wc -l)"
+    """
+}
+EOF
     echo "Merged variants: \$(grep -v "^#" ${sample}.jasmine.vcf | wc -l)"
     """
 }
