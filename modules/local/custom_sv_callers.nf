@@ -84,6 +84,7 @@ process MERGE_SVS {
 
 process MERGE_JASMINE {
     container 'eshrakaali/jasmine:1.1.5'
+    containerOptions '--entrypoint=""'
 
     input:
     tuple val(meta),
