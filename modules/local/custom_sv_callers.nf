@@ -83,8 +83,11 @@ process MERGE_SVS {
 }
 
 process MERGE_JASMINE {
+
     container 'eshrakaali/jasmine:1.1.7'
     containerOptions '--entrypoint=""'
+
+    publishDir "${params.out_dir}/jasmine", mode: 'copy'
 
     input:
     tuple val(meta),
@@ -97,22 +100,22 @@ process MERGE_JASMINE {
     tuple val(meta), path("${meta.alias}.jasmine.vcf"), emit: jasmine_vcf
 
     script:
-"""
-set -eo pipefail
+    """
+    set -eo pipefail
 
-printf "%s\n" \
-    ${sniffles_vcf} \
-    ${cutesv_vcf} \
-    ${svim_vcf} > vcf_list.txt
+    printf "%s\n" \
+        ${sniffles_vcf} \
+        ${cutesv_vcf} \
+        ${svim_vcf} > vcf_list.txt
 
-java -jar /opt/jasmine/jasmine.jar \
-    file_list=vcf_list.txt \
-    out_file=${meta.alias}.jasmine.vcf \
-    genome_file=${genome} \
-    max_dist=5000 \
-    min_support=1 \
-    --normalize_type \
-    --normalize_chrs \
-    --default_zero_genotype
-"""
+    java -jar /opt/jasmine/jasmine.jar \
+        file_list=vcf_list.txt \
+        out_file=${meta.alias}.jasmine.vcf \
+        genome_file=${genome} \
+        max_dist=5000 \
+        min_support=1 \
+        --normalize_type \
+        --normalize_chrs \
+        --default_zero_genotype
+    """
 }
