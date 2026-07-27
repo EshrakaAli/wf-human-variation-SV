@@ -769,12 +769,21 @@ if (params.cutesv && params.svim) {
     MERGE_SVS(merged_input)
     consensus_vcf = MERGE_SVS.out.consensus_vcf
 
-    // Jasmine
-jasmine_input = merged_input.combine(ref_channel)
+// Jasmine
+jasmine_input =
+    merged_input
+        .combine(jasmine_ref_channel)
+        .map { data, genome ->
+            tuple(
+                data[0],   // meta
+                data[1],   // sniffles
+                data[2],   // cutesv
+                data[3],   // svim
+                genome
+            )
+        }
 
-MERGE_JASMINE(
-    jasmine_input
-)
+MERGE_JASMINE(jasmine_input)
 
 jasmine_vcf = MERGE_JASMINE.out.jasmine_vcf
 }
